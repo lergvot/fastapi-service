@@ -39,11 +39,11 @@ services:
       - backend
     restart: unless-stopped
 
-  nginx-service:
+  nginx:
     build:
       context: ..
       dockerfile: Docker/Dockerfile.nginx
-    container_name: nginx
+    container_name: nginx-fastapi
     ports:
       - "80:80"
       # - "443:443" если нужен HTTPS
