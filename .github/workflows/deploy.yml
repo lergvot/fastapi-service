@@ -48,12 +48,12 @@ jobs:
               if docker compose -f Docker/docker-compose.yml ps --services --filter status=running | grep -q "postgres-db" && \
                  docker compose -f Docker/docker-compose.yml ps --services --filter status=running | grep -q "fastapi-service" && \
                  docker compose -f Docker/docker-compose.yml ps --services --filter status=running | grep -q "nginx-fastapi"; then
-                echo "✅ Все сервисы успешно запущены"
+                echo "✅ Все контейнеры успешно запущены"
                 break
               fi
               
               if [ $attempt -eq $max_attempts ]; then
-                echo "❌ Превышено время ожидания запуска сервисов"
+                echo "❌ Превышено время ожидания запуска контейнеров"
                 docker compose -f Docker/docker-compose.yml logs
                 exit 1
               fi

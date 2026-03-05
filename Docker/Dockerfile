@@ -1,5 +1,5 @@
-# Dockerfile
-FROM python:3.13.9-slim AS builder
+# Docker/Dockerfile
+FROM python:3.13-slim AS builder
 
 # Устанавливаем зависимости для сборки
 RUN apt-get update && \
@@ -18,7 +18,7 @@ RUN pip install --upgrade pip && \
     pip install --no-cache-dir --user -r requirements.txt
 
 # Финальный образ
-FROM python:3.13.9-slim
+FROM python:3.13-slim
 
 # Копируем установленные зависимости из builder-стадии
 COPY --from=builder /root/.local /root/.local
