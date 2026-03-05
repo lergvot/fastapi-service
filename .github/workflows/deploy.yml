@@ -37,20 +37,31 @@ jobs:
             echo "Сборка и запуск..."
             docker compose -f Docker/docker-compose.yml up -d --build
 
+            echo "Ожидание запуска контейнеров..."
             sleep 10
+
             echo "Проверка статуса контейнеров..."
-            if ! docker compose -f Docker/docker-compose.yml ps --services --filter status=running | grep -q "postgres-db"; then
-              echo "❌ Ошибка: сервис postgres-db не запущен"
-              exit 1
-            fi
-            if ! docker compose -f Docker/docker-compose.yml ps --services --filter status=running | grep -q "fastapi-service"; then
-              echo "❌ Ошибка: сервис fastapi-service не запущен"
-              exit 1
-            fi
-            if ! docker compose -f Docker/docker-compose.yml ps --services --filter status=running | grep -q "nginx-fastapi"; then
-              echo "❌ Ошибка: сервис nginx-fastapi не запущен"
-              exit 1
-            fi
+            # Добавляем цикл проверки с таймаутом
+            max_attempts=7
+            attempt=1
+            while [ $attempt -le $max_attempts ]; do
+              if docker compose -f Docker/docker-compose.yml ps --services --filter status=running | grep -q "postgres-db" && \
+                 docker compose -f Docker/docker-compose.yml ps --services --filter status=running | grep -q "fastapi-service" && \
+                 docker compose -f Docker/docker-compose.yml ps --services --filter status=running | grep -q "nginx-fastapi"; then
+                echo "✅ Все контейнеры успешно запущены"
+                break
+              fi
+              
+              if [ $attempt -eq $max_attempts ]; then
+                echo "❌ Превышено время ожидания запуска контейнеров"
+                docker compose -f Docker/docker-compose.yml logs
+                exit 1
+              fi
+
+              echo "⏳ Попытка $attempt из $max_attempts, ожидание 10 секунд..."
+              sleep 10
+              attempt=$((attempt + 1))
+            done
 
             echo "✅ Deployment completed"
         env:

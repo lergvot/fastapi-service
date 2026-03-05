@@ -21,3 +21,4 @@ docker-compose.override.yml
 TODO.md
 diff.txt
 docker-compose.override.yml
+DEVELOPER_GUIDE.md

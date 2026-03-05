@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
-@router.post("/notes/add", tags=["Notes"])
+# @router.post("/notes/add", tags=["Notes"])
 def add_note(
     request: Request, note: str = Form(...), background_tasks: BackgroundTasks = None
 ) -> RedirectResponse:
@@ -42,7 +42,7 @@ def add_note(
     return RedirectResponse("/", status_code=status.HTTP_303_SEE_OTHER)
 
 
-@router.post("/notes/delete/{note_id}", tags=["Notes"])
+# @router.post("/notes/delete/{note_id}", tags=["Notes"])
 def delete_note(
     note_id: int, background_tasks: BackgroundTasks = None
 ) -> RedirectResponse:
