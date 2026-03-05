@@ -39,7 +39,7 @@ services:
       - backend
     restart: unless-stopped
 
-  nginx:
+  nginx-service:
     build:
       context: ..
       dockerfile: Docker/Dockerfile.nginx
