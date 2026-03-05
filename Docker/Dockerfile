@@ -4,11 +4,7 @@ FROM python:3.13-slim AS builder
 # Устанавливаем зависимости для сборки
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    libpq-dev \
-    gcc \
-    python3-dev \
-    build-essential \
-    curl && \
+    libpq-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
