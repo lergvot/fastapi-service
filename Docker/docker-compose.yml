@@ -12,7 +12,8 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_HOST: db
-    # Убираем проброс портов, так как теперь через nginx
+    ports:
+      - "127.0.0.1:8000:8000"
     command: >
       sh -c "alembic upgrade head &&
              uvicorn main:app --host 0.0.0.0 --port 8000"
@@ -35,20 +36,6 @@ services:
       - pg_data:/var/lib/postgresql/data
     ports:
       - "127.0.0.1:5432:5432"
-    networks:
-      - backend
-    restart: unless-stopped
-
-  nginx:
-    build:
-      context: ..
-      dockerfile: Docker/Dockerfile.nginx
-    container_name: nginx-fastapi
-    ports:
-      - "80:80"
-      # - "443:443" если нужен HTTPS
-    depends_on:
-      - fastapi-service
     networks:
       - backend
     restart: unless-stopped
